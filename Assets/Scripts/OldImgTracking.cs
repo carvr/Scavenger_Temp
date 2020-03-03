@@ -4,7 +4,7 @@ using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 using System.Collections;
-public class ImgTracking : MonoBehaviour
+public class OldImgTracking : MonoBehaviour
 {
     [SerializeField]
     //  internal immutable object list
@@ -76,8 +76,9 @@ public class ImgTracking : MonoBehaviour
         debugger2.text = "";
         foreach (var tracked in tempAllThings)
         {
-            debugger2.text += $"{tracked.referenceImage.name} is now {tracked.trackingState}\n";
+            debugger2.text = $"{""} is now {tracked.referenceImage.name.ToString()}";
         }
+
 
         foreach (ARTrackedImage trackedImage in eventArgs.added)
         {
@@ -94,8 +95,20 @@ public class ImgTracking : MonoBehaviour
         foreach (ARTrackedImage trackedImage in eventArgs.removed)
         {
 
+            //May need to remove refrece iamge name thingy 
+
+            /*           foreach(GameObject obj in objList)
+                       {
+                           if(trackedImage.referenceImage.name == obj.name)
+                           {
+                               obj.SetActive(false);
+                           }
+                       }*/
+
             objDictionary[trackedImage.referenceImage.name].SetActive(false);
 
+            //arObjects[trackedImage.name].SetActive(false);
+           // debugger.text = trackedImage.referenceImage.name + "removed";
         }
     }
 
@@ -106,7 +119,13 @@ public class ImgTracking : MonoBehaviour
             //if first obj, set as current, remove, and shuffle list
             if (listCount == objList.Count)
             {
-
+                /*foreach (GameObject obj in objList)
+                {
+                    if (trackedImage.referenceImage.name == obj.name)
+                    {
+                        currentObj = obj;
+                    }
+                }*/
                 currentObj = objDictionary[trackedImage.referenceImage.name];
                 objList.Remove(currentObj);
                 //debugger.text = "List CountFirstPass is " + objList.Count.ToString();
@@ -117,6 +136,13 @@ public class ImgTracking : MonoBehaviour
                 //if not first object and is next obj, set as current, and remove
                 if (trackedImage.referenceImage.name == nextObj.name)
                 {
+                    /*foreach (GameObject obj in objList)
+                    {
+                        if (trackedImage.referenceImage.name == obj.name)
+                        {
+                            currentObj = obj;
+                        }
+                    }*/
                     currentObj = nextObj;
                     objList.Remove(currentObj);
                     //debugger.text = "List Count is " + objList.Count.ToString(); 
@@ -128,17 +154,56 @@ public class ImgTracking : MonoBehaviour
             debugger.text = currentObj.name + "->" + nextObj.name;
 
 
-            currentObj.SetActive(true);
-            /*debugger2.text = trackedImage.referenceImage.name; */
-            currentObj.transform.position = trackedImage.transform.position;
-            currentObj.transform.rotation = trackedImage.transform.rotation;
-            currentObj.transform.localScale = scaleFactor;
-            if (trackedImage.trackingState != TrackingState.Tracking)
+            if (trackedImage.trackingState == TrackingState.Tracking)
             {
+    
+
+               /* foreach (GameObject obj in objList)
+                {*/
+                    /*if (trackedImage.referenceImage.name == currentObj.name)
+                    {
+                        //debugger.text = currentObj.name + "is instantiated";
+                        currentObj.SetActive(true);
+                        currentObj.transform.position = trackedImage.transform.position;
+                        //currentObj.transform.rotation = trackedImage.transform.rotation;
+                        currentObj.transform.localScale = scaleFactor;
+                    }*/
+
+                currentObj.SetActive(true);
+                currentObj.transform.position = trackedImage.transform.position;
+                currentObj.transform.rotation = trackedImage.transform.rotation;
+                currentObj.transform.localScale = scaleFactor;
+                //debugger2.text = "Obj is " + trackedImage.trackingState.ToString();
+                /*}*/
+            }
+            else
+            {
+                /*foreach (GameObject obj in objList)
+                {
+                    if (trackedImage.referenceImage.name == currentObj.name)
+                    {
+                        currentObj.SetActive(false);
+                   }
+                }*/
 
                 currentObj.SetActive(false);
 
             }
+
+
+            /*string name = trackedImage.referenceImage.name;
+            GameObject goARObject = arObjects[name];
+            if (trackedImage.trackingState == TrackingState.Tracking)
+            {
+                goARObject.SetActive(true);
+                goARObject.transform.position = trackedImage.transform.position;
+                goARObject.transform.rotation = trackedImage.transform.rotation;
+                goARObject.transform.localScale = scaleFactor;
+            }
+            else
+            {
+                goARObject.SetActive(false);
+            }*/
         }
 
     }
