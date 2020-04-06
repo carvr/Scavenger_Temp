@@ -1,9 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR.ARFoundation;
 
 public class ScavangerLogicListener : MonoBehaviour
 {
+
+    //cOMMENT 
 
     // is listening to the imageTracking Script
     [SerializeField]
@@ -34,12 +37,12 @@ public class ScavangerLogicListener : MonoBehaviour
     }
     
 
-    void ImageOnScreen(string imageName) {
+    void ImageOnScreen(ARTrackedImage trackedImage) {
 
     }
 
 
-    void ImageOffScreen(string imageName)
+    void ImageOffScreen(ARTrackedImage trackedImage)
     {
 
     }
