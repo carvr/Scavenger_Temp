@@ -4,7 +4,7 @@ using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 using System.Collections;
-public class OldImgTracking : MonoBehaviour
+public class ImgTrackingv0 : MonoBehaviour
 {
     [SerializeField]
     //  internal immutable object list

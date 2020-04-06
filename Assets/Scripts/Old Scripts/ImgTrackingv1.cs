@@ -4,7 +4,7 @@ using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 using System.Collections;
-public class ImgTracking : MonoBehaviour
+public class ImgTrackingv1 : MonoBehaviour
 {
     [SerializeField]
     //  internal immutable object list
@@ -79,15 +79,21 @@ public class ImgTracking : MonoBehaviour
             debugger2.text += $"{tracked.referenceImage.name} is now {tracked.trackingState}\n";
         }
 
+        /*
         foreach (ARTrackedImage trackedImage in eventArgs.added)
         {
             UpdateARImage(trackedImage);
            // debugger.text = trackedImage.referenceImage.name + "added";
         }
+        */
 
         foreach (ARTrackedImage trackedImage in eventArgs.updated)
         {
-            UpdateARImage(trackedImage);
+            if (trackedImage.trackingState == TrackingState.Tracking)
+            {
+                UpdateARImage(trackedImage);
+            }
+            //put the verify ifcorrect image in new function
             //debugger.text = trackedImage.referenceImage.name + "updated";
         }
 
@@ -111,6 +117,7 @@ public class ImgTracking : MonoBehaviour
                 objList.Remove(currentObj);
                 //debugger.text = "List CountFirstPass is " + objList.Count.ToString();
                 objList = new List<GameObject>(ShuffleList(objList));
+                nextObj = objList[0];
             }
             else
             {
@@ -119,11 +126,12 @@ public class ImgTracking : MonoBehaviour
                 {
                     currentObj = nextObj;
                     objList.Remove(currentObj);
+                    nextObj = objList[0];
                     //debugger.text = "List Count is " + objList.Count.ToString(); 
                 }
             }
 
-            nextObj = objList[0];
+            
 
             debugger.text = currentObj.name + "->" + nextObj.name;
 
