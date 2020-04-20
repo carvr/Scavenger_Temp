@@ -17,7 +17,7 @@ public class ARImgTransformListener : MonoBehaviour
     
     private void Start()
     {
-        TrackedImageInfoMultipleManager.Instance.imageOnScreen += (ARTrackedImage trackedImage) =>
+        TrackedImageInfoManager.Instance.onImageEnterScreen += (ARTrackedImage trackedImage) =>
         {
             if (trackedImage.name == targetImageName)
             {
@@ -25,7 +25,7 @@ public class ARImgTransformListener : MonoBehaviour
                 gameObject.SetActive(true);
             }
         };
-        TrackedImageInfoMultipleManager.Instance.imageOffScreen += (ARTrackedImage trackedImage) =>
+        TrackedImageInfoManager.Instance.onImageExitScreen += (ARTrackedImage trackedImage) =>
         {
             if (trackedImage.name == targetImageName)
             {
@@ -33,6 +33,8 @@ public class ARImgTransformListener : MonoBehaviour
                 gameObject.SetActive(false);
             }
         };
+
+        // gameObject.SetActive(false);
     }
 
     private void Update()

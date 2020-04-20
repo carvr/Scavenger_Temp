@@ -5,22 +5,26 @@ using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 [RequireComponent(typeof(ARTrackedImageManager))]
-public class TrackedImageInfoMultipleManager : Singleton<TrackedImageInfoMultipleManager>
+public class TrackedImageInfoManager : Singleton<TrackedImageInfoManager>
 {
+    //new stuffs for listening, creates events to be pinged for listeners to hear
+    public event Action<ARTrackedImage> onImageEnterScreen;
+    public event Action<ARTrackedImage> onImageExitScreen;
+
+    private HashSet<ARTrackedImage> _imagesOnScreen = new HashSet<ARTrackedImage>();
+    public IReadOnlyCollection<ARTrackedImage> ImagesOnScreen { get { return _imagesOnScreen; } } // Note: this is still mutable if someone casts it :\
+
+
     // AR Foundation subsystem
     private ARTrackedImageManager trackedImageManager;
 
     // Dictionary for keeping trackedImage of last TrackingState (helps for only calling these event once)
     private Dictionary<string, TrackingState> lastStateDict = new Dictionary<string, TrackingState>();
 
-    //new stuffs for listening, creates events to be pinged for listeners to hear
-    public event Action<ARTrackedImage> imageOnScreen;
-    public event Action<ARTrackedImage> imageOffScreen;
-
     new protected void Awake()
     {
         base.Awake();
-        
+
         trackedImageManager = GetComponent<ARTrackedImageManager>();
 
         // setup all game objects in lastStateDictionary
@@ -68,9 +72,10 @@ public class TrackedImageInfoMultipleManager : Singleton<TrackedImageInfoMultipl
             // only does so if it was not being tracked before this (just came on screen)
             if (lastStateDict[imageName] != TrackingState.Tracking)
             {
-                if (imageOnScreen != null)
+                if (onImageEnterScreen != null)
                 {
-                    imageOnScreen(trackedImage);
+                    _imagesOnScreen.Add(trackedImage);
+                    onImageEnterScreen(trackedImage);
                 }
             }
 
@@ -82,9 +87,10 @@ public class TrackedImageInfoMultipleManager : Singleton<TrackedImageInfoMultipl
             // only does so if it was being tracked before this (just went off screen)
             if (lastStateDict[imageName] == TrackingState.Tracking)
             {
-                if (imageOffScreen != null)
+                if (onImageExitScreen != null)
                 {
-                    imageOffScreen(trackedImage);
+                    _imagesOnScreen.Remove(trackedImage);
+                    onImageExitScreen(trackedImage);
                 }
             }
 

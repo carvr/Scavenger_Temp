@@ -4,7 +4,10 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/SacavangerHunt.unity
+    guid: f9e7286372d5cb74b860e995270abf09
   m_configObjects:
     com.unity.xr.management.arcore_loader: {fileID: 11400000, guid: 438a4fee3e0293044b26971193de9341,
       type: 2}
